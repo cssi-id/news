@@ -1,6 +1,7 @@
 
 
 async function loadArticles() {
+  // berita utama
     try {
       // Mengambil file JSON
       const response = await fetch('./json/utama.json');
@@ -49,8 +50,10 @@ async function loadArticles() {
       console.error('Error fetching the data:', error);
       document.getElementById('content').innerHTML = '<p>Terjadi kesalahan saat memuat berita. Silakan coba lagi nanti.</p>';
     }
+  
   }
   
   // Memanggil fungsi loadArticles ketika halaman dimuat
-  window.onload = loadArticles;
+  loadArticles();
+  // window.onload = loadArticles;
   

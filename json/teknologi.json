@@ -1,0 +1,14 @@
+{
+  "teknologi": [
+    {
+      "title": "teknologi json loader",
+      "date": "09/12/1991",
+      "image-src": "http://xxx",
+      "content": [
+        "<br>","<br>"
+      ],
+      "sumber": "cnnindonesia",
+      "reff": "sumber http://xxx"
+    }
+  ]
+}
