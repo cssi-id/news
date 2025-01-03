@@ -4,6 +4,23 @@ body {
     margin: 0;
     padding: 0;
   }
+  /* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+h1 {
+    text-align: center;
+}
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+} */
 
   header {
     background-color: #06205d;
@@ -71,10 +88,17 @@ nav a.active::after {
 
   
   
-  .container {
-    padding: 20px;
-    margin-top: 80px;
-  }
+.container {
+  padding: 20px;
+  margin-top: 80px;
+}
+
+.container-table {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
   .article {
     margin-bottom: 20px;
     border-bottom: 1px solid #ddd;
@@ -120,7 +144,73 @@ nav a.active::after {
     font-size: 10px;
   }
   
+  /* table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  table, th, td {
+      border: 1px solid #ddd;
+  }
+  th, td {
+      padding: 12px;
+      text-align: left;
+  }
+  th {
+      background-color: #f4f4f4;
+  }
+  .loading, .error {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+  }
+  .error {
+      color: red;
+  }
   
+  /* Style untuk tab */
+  .tabs {
+      overflow: hidden;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+  }
+
+  .tabs button {
+      background-color: #ddd;
+      float: left;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  .tabs button:hover {
+      background-color: #bbb;
+  }
+
+  .tabs button.active {
+      background-color: #4CAF50;
+      color: white;
+  }
+
+  /* Konten Tab */
+  .tab-content {
+      display: none;
+      padding: 20px;
+      border-top: 1px solid #ccc;
+  }
+
+  .tab-content.active {
+      display: block;
+  }
+
+  .tbody .img {
+    width: 50px;
+    height: auto;
+}
+
   /* harus paling bawah */
   @media (max-width: 700px) {
     nav {
@@ -144,5 +234,17 @@ nav a.active::after {
       .img-src {
         margin: 0 auto;
         max-width: 100%;
+      }
+
+      /* table */
+      table {
+        font-size: 12px;
+      }
+      th {background-color: #06205d; color: aliceblue;}
+      th, td {
+          padding: 5px;
+      }
+      .container-table {
+          overflow-x: auto;
       }
   }

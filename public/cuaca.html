@@ -3,94 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSSI BMKG</title>
+  <title>BMKG ON CSSI</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
-  <!-- start -->
-    <header>
-        <div id="digital-clock"></div>
-        <h1 style="color: red;">CSSI-ID 
-            <span style="color: aliceblue;">NEWS</span>
-        </h1>
-    </header>
-
-    <nav>
-      <a href="../index.html" >Hot</a>
-      <a href="./teknologi.html" >Teknologi</a>
-      <a href="./olahraga.html" >Olahraga</a>
-      <a href="./cuaca.html" class="active">Cuaca</a>
-      <a href="./contact.html">Kontak</a>
-    </nav>
-
-  <div>
-    <div class="container" id="cuaca"></div>
+  <!-- header -->
+  <header>
+    <div id="digital-clock"></div>
+    <h1 style="color: red;">CSSI-ID 
+        <span style="color: aliceblue;">NEWS</span>
+    </h1>
+  </header>
+  <!-- navigasi -->
+  <nav>
+    <a href="../index.html" >Hot</a>
+    <a href="./teknologi.html">Teknologi</a>
+    <a href="./olahraga.html" >Olahraga</a>
+    <a href="./cuaca.html" class="active">Cuaca</a>
+    <a href="./contact.html" >Kontak</a>
+  </nav>
+  <!-- tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="openTab(event, 'tab1')">Cuaca</button>
+    <button class="tab-button" onclick="openTab(event, 'tab2')">Data Gempa</button>
   </div>
 
+  <div id="tab1" class="tab-content active">
+    <!-- cuaca -->
+    <h1>Prakiraan Cuaca BMKG untuk Warungjeruk, Purwakarta</h1>
+
+    <table id="weather-table">
+        <thead>
+            <tr>
+                <th>Waktu</th>
+                <th>Suhu (°C)</th>
+                <th>Deskripsi Cuaca</th>
+                <th>Kecepatan Angin (m/s)</th>
+                <th>Ikon Cuaca</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data cuaca akan dimuat di sini -->
+        </tbody>
+    </table>
+  </div>
+
+  <div id="tab2" class="tab-content">
+  <!-- gempa -->
+  <div class="container-table">
+    <h3>Data Gempa Terkini</h3>
+    <div id="gempa-container">
+        <p class="loading">Loading data...</p>
+    </div>
+  </div>
+  </div>
+
+  <br>
+  <!-- footer -->
   <footer>
     <p>
-        &copy; 2025 BMKG ON CSSI
+        &copy;  <span style="color: red;">CSSI </span> ON <a href="https://data.bmkg.go.id" style="color: green;">BMKG</a>
     </p>
   </footer>
-  <!-- end -->
 
-<!-- script -->
-<script>
-  async function Cuaca() {
-    try {
-      // Mengambil file JSON
-      const response = await fetch('../json/cuaca.json');
-      
-      // Cek apakah status HTTP berhasil (200)
-      if (!response.ok) {
-        throw new Error('Gagal memuat file JSON');
-      }
-  
-      const data = await response.json(); // Mengonversi JSON
-  
-      const content = document.getElementById('cuaca');
-      content.innerHTML = ''; // Kosongkan konten yang ada
-  
-      if (data['cuaca']) {
-        data['cuaca'].forEach(article => {
-          const articleDiv = document.createElement('div');
-          articleDiv.className = 'article';
-  
-          // Memeriksa dan menampilkan konten artikel
-          let articleContent = '';
-          if (Array.isArray(article.content)) {
-            articleContent = article.content.join(''); // Gabungkan konten menjadi satu string tanpa tambahan pemisah
-          } else {
-            articleContent = article.content;
-          }
-  
-          articleDiv.innerHTML = `
-            <h1>${article.title}</h1>
-            <span class="date">${article.date}</span><br><br>
-            <div><img src="${article['image-src']}" class="img-src" alt="Image"></div>
-            <p>${articleContent}</p>
-            <p>
-              sumber <a href="${article.reff}" target="_blank">${article.sumber}</a>
-            </p>
-          `;
-  
-          content.appendChild(articleDiv); // Menambahkan artikel ke dalam konten
-        });
-      } else {
-        content.innerHTML = '<p>Data berita tidak ditemukan!</p>';
-      }
-  
-    } catch (error) {
-      console.error('Error fetching the data:', error);
-      document.getElementById('content').innerHTML = '<p>Terjadi kesalahan saat memuat berita. Silakan coba lagi nanti.</p>';
+  <!-- bmkg data gempa -->
+  <script>
+    async function fetchGempaTerkini() {
+        try {
+            const response = await fetch('https://data.bmkg.go.id/DataMKG/TEWS/gempaterkini.json');
+            if (!response.ok) {
+                throw new Error('Gagal mengambil data: ' + response.statusText);
+            }
+
+            const data = await response.json();
+            const gempaList = data.Infogempa.gempa;
+            const gempaContainer = document.getElementById('gempa-container');
+
+            if (gempaList.length === 0) {
+                gempaContainer.innerHTML = '<p>Tidak ada data gempa saat ini.</p>';
+                return;
+            }
+
+            let htmlContent = '<table>';
+            htmlContent += `
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                    <th>Magnitude</th>
+                    <th>Kedalaman</th>
+                    <th>Koordinat</th>
+                    <th>Wilayah</th>
+                </tr>
+            `;
+
+            gempaList.forEach(gempa => {
+                htmlContent += `
+                    <tr>
+                        <td>${gempa.Tanggal}</td>
+                        <td>${gempa.Jam}</td>
+                        <td>${gempa.Magnitude}</td>
+                        <td>${gempa.Kedalaman}</td>
+                        <td>${gempa.Coordinates}</td>
+                        <td>${gempa.Wilayah}</td>
+                    </tr>
+                `;
+            });
+
+            htmlContent += '</table>';
+            gempaContainer.innerHTML = htmlContent;
+        } catch (error) {
+            document.getElementById('gempa-container').innerHTML = `<p class="error">Error: ${error.message}</p>`;
+        }
     }
-  }
-  
-  // Memanggil fungsi loadArticles ketika halaman dimuat
-  //window.onload = loadTeknologi;
-  Cuaca();
-  
+
+    fetchGempaTerkini();
+  </script>
+  <!-- bmkg data cuaca -->
+  <script>
+    // URL API BMKG
+    const url = 'https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=32.14.08.2005';
+
+    // Mengambil data cuaca menggunakan fetch
+    fetch(url)
+        .then(response => response.json()) // Mengonversi respons menjadi JSON
+        .then(data => {
+            // Memasukkan data cuaca ke dalam tabel
+            const weatherData = data.data[0].cuaca; // Ambil data cuaca
+            const tableBody = document.getElementById('weather-table').getElementsByTagName('tbody')[0];
+
+            // Mengisi tabel dengan data cuaca
+            weatherData.forEach(weather => {
+                weather.forEach(hourlyData => {
+                    const row = tableBody.insertRow();
+
+                    // Waktu
+                    const cell1 = row.insertCell(0);
+                    cell1.textContent = hourlyData.local_datetime;
+
+                    // Suhu (°C)
+                    const cell2 = row.insertCell(1);
+                    cell2.textContent = hourlyData.t;
+
+                    // Deskripsi Cuaca
+                    const cell3 = row.insertCell(2);
+                    cell3.textContent = hourlyData.weather_desc_en;
+
+                    // Kecepatan Angin (m/s)
+                    const cell4 = row.insertCell(3);
+                    cell4.textContent = hourlyData.ws;
+
+                    // Ikon Cuaca
+                    const cell5 = row.insertCell(4);
+                    const img = document.createElement('img');
+                    img.src = hourlyData.image;
+                    cell5.appendChild(img);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Terjadi kesalahan saat mengambil data cuaca:', error);
+        });
+  </script>
+  <!-- end bmkg -->
+
+  <!-- tabs -->
+  <script>
+    function openTab(event, tabName) {
+        // Menyembunyikan semua konten tab
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Menonaktifkan semua tombol tab
+        const tabButtons = document.querySelectorAll('.tab-button');
+        tabButtons.forEach(button => button.classList.remove('active'));
+
+        // Menampilkan konten tab yang dipilih
+        document.getElementById(tabName).classList.add('active');
+
+        // Menandai tombol tab yang dipilih
+        event.currentTarget.classList.add('active');
+    }
 </script>
-<script src="../js/time.js"></script>
 </body>
 </html>
