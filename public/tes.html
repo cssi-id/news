@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kode Wilayah Lokal</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pilih Kode Wilayah</h1>
+  <select id="kode-wilayah">
+      <option value="">Loading...</option>
+  </select>
+
+  <script>
+    async function loadWilayahFromLocalCSV() {
+        const url = './kodewilayah.id/base.csv'; // Path file CSV lokal
+        const selectElement = document.getElementById('kode-wilayah');
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Gagal memuat data CSV');
+            }
+
+            const csvText = await response.text();
+            console.log("CSV Text:", csvText); // Debugging untuk melihat isi CSV
+
+            const rows = csvText.split('\n');
+            const headers = rows[0].split(',');
+
+            const jsonData = rows.slice(1).map(row => {
+                const values = row.split(',');
+                const obj = {};
+                headers.forEach((header, index) => {
+                    obj[header.trim()] = values[index]?.trim();
+                });
+                return obj;
+            });
+
+            // Debugging untuk melihat hasil konversi ke JSON
+            console.log("JSON Data:", jsonData);
+
+            // Kosongkan opsi 'Loading...'
+            selectElement.innerHTML = '';
+
+            // Tambahkan opsi ke dropdown
+            jsonData.forEach(item => {
+                if (item.kode && item.nama) {
+                    const option = document.createElement('option');
+                    option.value = item.kode;
+                    option.textContent = `${item.nama} (${item.kode})`;
+                    selectElement.appendChild(option);
+                }
+            });
+
+            if (jsonData.length === 0) {
+                selectElement.innerHTML = '<option value="">Tidak ada data wilayah</option>';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            selectElement.innerHTML = '<option value="">Gagal memuat data</option>';
+        }
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    loadWilayahFromLocalCSV();
+  </script>
+</body>
+</html>

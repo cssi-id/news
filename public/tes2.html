@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prakiraan Cuaca BMKG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        img {
+            width: 50px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Prakiraan Cuaca BMKG untuk Warungjeruk, Purwakarta</h1>
+
+    <table id="weather-table">
+        <thead>
+            <tr>
+                <th>Waktu</th>
+                <th>Suhu (°C)</th>
+                <th>Deskripsi Cuaca</th>
+                <th>Kecepatan Angin (m/s)</th>
+                <th>Ikon Cuaca</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data cuaca akan dimuat di sini -->
+        </tbody>
+    </table>
+
+    <script>
+        // URL API BMKG
+        const url = 'https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=32.14.08.2005';
+
+        // Mengambil data cuaca menggunakan fetch
+        fetch(url)
+            .then(response => response.json()) // Mengonversi respons menjadi JSON
+            .then(data => {
+                // Memasukkan data cuaca ke dalam tabel
+                const weatherData = data.data[0].cuaca; // Ambil data cuaca
+                const tableBody = document.getElementById('weather-table').getElementsByTagName('tbody')[0];
+
+                // Mengisi tabel dengan data cuaca
+                weatherData.forEach(weather => {
+                    weather.forEach(hourlyData => {
+                        const row = tableBody.insertRow();
+
+                        // Waktu
+                        const cell1 = row.insertCell(0);
+                        cell1.textContent = hourlyData.local_datetime;
+
+                        // Suhu (°C)
+                        const cell2 = row.insertCell(1);
+                        cell2.textContent = hourlyData.t;
+
+                        // Deskripsi Cuaca
+                        const cell3 = row.insertCell(2);
+                        cell3.textContent = hourlyData.weather_desc_en;
+
+                        // Kecepatan Angin (m/s)
+                        const cell4 = row.insertCell(3);
+                        cell4.textContent = hourlyData.ws;
+
+                        // Ikon Cuaca
+                        const cell5 = row.insertCell(4);
+                        const img = document.createElement('img');
+                        img.src = hourlyData.image;
+                        cell5.appendChild(img);
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Terjadi kesalahan saat mengambil data cuaca:', error);
+            });
+    </script>
+
+</body>
+</html>
