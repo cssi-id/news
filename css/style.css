@@ -1,0 +1,146 @@
+/* ./css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    background-color: #06205d;
+    /* color: white; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 9px;
+    font-family: 'Montserrat', sans-serif;
+    /* border-top: 1px solid #f7260a;
+    border-bottom: 1px solid #f7260a; */
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
+  nav {
+    /* background: #f8f9fa; */
+    background: #06205d;
+    padding: 10px;
+    display: flex;
+    justify-content:flex-start;
+    /* gap: 20px; */
+  }
+
+nav a {
+  text-decoration: none;
+  color: aliceblue;
+  font-weight: bold;
+  margin-right: 10px;
+  position: relative; /* Dibutuhkan untuk efek garis */
+  padding: 5px 0;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: aliceblue; /* Warna garis neon */
+  box-shadow: 0 0 5px aliceblue, 0 0 10px aliceblue; /* Efek neon */
+  transition: width 0.3s ease-in-out;
+}
+
+nav a:hover::after {
+  width: 100%; /* Garis memanjang saat hover */
+}
+
+nav a:hover {
+  color: aliceblue; /* Mengubah warna teks saat hover */
+}
+
+/* Gaya untuk tautan aktif */
+nav a.active {
+  color: #e61414; /* Warna teks aktif */
+}
+
+nav a.active::after {
+  width: 100%; /* Garis neon selalu terlihat */
+}
+
+  
+  
+  .container {
+    padding: 20px;
+  }
+  .article {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  .article h2 {
+    margin-top: 0;
+  }
+
+  footer {
+    display: flex;
+    justify-content: flex-start;
+    background: #06205d;
+    border-top: 1px solid #f7260a;
+    border-bottom: 1px solid #f7260a;
+  } footer p {margin-left: 10px;color: aliceblue;}
+  
+
+  #digital-clock {
+    position: absolute;
+    top: 5px; /* Menempatkan jam sedikit dari atas */
+    right: 10px; /* Menempatkan jam sedikit dari sisi kanan */
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    color: aliceblue;
+    width: auto;
+  }
+  .date {
+    font-size: 10px;
+  }
+  /*  */
+  #content {
+    width: 600px;
+  }
+  .container a {
+    text-decoration: none; color: #f7260a;
+  }
+  .img-src {
+    width: 400px;
+    height: auto;
+  }
+  .article {
+    font-size: 10px;
+  }
+  
+  
+  /* harus paling bawah */
+  @media (max-width: 700px) {
+    nav {
+        /* background: #f8f9fa; */
+        padding: 10px;
+        display: block;
+        justify-content: space-between;
+        grid-area: 10;
+      }
+      .container {
+        padding: 0;
+        max-width: 100%;
+      }
+      .article {
+        margin: 0 auto;
+        max-width: 90%;
+        margin-right: 20px;
+        font-size: 10px;
+      }
+      .img-src {
+        margin: 0 auto;
+        max-width: 100%;
+      }
+  }
